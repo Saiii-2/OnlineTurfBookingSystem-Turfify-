@@ -66,6 +66,34 @@
         max-width: 900px;
         margin: 0 auto;
     }
+    .search-box {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 16px;
+        gap: 10px;
+    }
+    .search-box input[type="text"] {
+        padding: 10px 14px;
+        border-radius: 6px;
+        border: 1px solid #bbb;
+        font-size: 1rem;
+        min-width: 220px;
+    }
+    .search-box input[type="submit"] {
+        padding: 10px 22px;
+        border-radius: 6px;
+        outline: none;
+        border: none;
+        background: #007acc;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.19s;
+    }
+    .search-box input[type="submit"]:hover {
+        background: #005fa3;
+    }
     table {
         border-collapse: collapse;
         width: 100%;
@@ -94,7 +122,7 @@
 <body>
 <header>
     <div class="header-container">
-        <h1>Online Turf Booking</h1>
+        <h1>Turfify</h1>
         <nav>
             <a href="userDashboard.jsp">Dashboard</a>
             <a href="logout.jsp">Logout</a>
@@ -103,6 +131,10 @@
 </header>
 <div class="container">
     <h2>Available Turfs</h2>
+    <form class="search-box" method="get" action="TurfServlet">
+        <input type="text" name="query" value="<%= request.getParameter("query") != null ? request.getParameter("query") : "" %>" placeholder="Search Turf, Location, or Sport..." />
+        <input type="submit" value="Search"/>
+    </form>
     <table>
         <tr>
             <th>Turf Name</th>
@@ -113,8 +145,10 @@
         </tr>
         <%
             ResultSet turfs = (ResultSet) request.getAttribute("turfs");
+            boolean hasResults = false;
             if (turfs != null) {
                 while (turfs.next()) {
+                    hasResults = true;
         %>
         <tr>
             <td><%= turfs.getString("turf_name") %></td>
@@ -124,10 +158,11 @@
             <td><a class="book-btn" href="bookTurf.jsp?turfId=<%= turfs.getInt("turf_id") %>">Book Now</a></td>
         </tr>
         <%      }
-            } else {
+            }
+            if (!hasResults) {
         %>
         <tr>
-            <td colspan="5">No turfs available</td>
+            <td colspan="5" style="text-align:center;">No turfs found for your search.</td>
         </tr>
         <% } %>
     </table>

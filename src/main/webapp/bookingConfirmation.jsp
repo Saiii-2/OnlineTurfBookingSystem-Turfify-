@@ -62,35 +62,59 @@
         background-color: #005fa3;
     }
     .container {
-        padding: 100px 20px 20px 20px;
+        padding: 104px 20px 20px 20px;
+        max-width: 500px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .confirmation-img {
+        margin-bottom: 24px;
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 3px 14px rgba(0,188,212,0.18);
+    }
+    .celebrate-msg {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #007acc;
+        margin-bottom: 12px;
     }
     a.button {
         display: inline-block;
         padding: 15px 40px;
-        margin-top: 30px;
+        margin-top: 24px;
         background-color: #007acc;
         color: white;
         text-decoration: none;
         border-radius: 8px;
         font-size: 18px;
         margin-right: 16px;
+        font-weight: 500;
+        box-shadow: 0 2px 12px rgba(0,123,187,0.06);
+        transition: background 0.2s, box-shadow 0.2s;
     }
     a.button:hover {
         background-color: #005fa3;
+        box-shadow: 0 4px 20px rgba(0,123,187,0.18);
     }
     @media (max-width: 600px) {
         .header-container { padding: 0 8px; }
         header h1 { font-size: 17px; }
         header nav a { font-size: 13px; padding: 5px 10px; }
-        .container { padding: 90px 8px 24px 8px;}
+        .container { padding: 90px 8px 24px 8px; }
         a.button { font-size: 14px; padding: 9px 14px;}
+        .confirmation-img { width: 70px; height: 70px;}
+        .celebrate-msg { font-size: 1.5rem;}
     }
 </style>
 </head>
 <body>
 <header>
     <div class="header-container">
-        <h1>Online Turf Booking</h1>
+        <h1>Turfify</h1>
         <nav>
             <% if (session.getAttribute("user") != null) { %>
                 <a href="userDashboard.jsp">Dashboard</a>
@@ -102,8 +126,9 @@
     </div>
 </header>
 <div class="container">
-    <h2>Booking Confirmed!</h2>
-    <p>Your turf booking was successful.</p>
+    <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Confirmed" class="confirmation-img"/>
+    <div class="celebrate-msg">Booking Confirmed!</div>
+    <p>Your turf booking was successful.<br>Get ready to play and have fun!</p>
     <a class="button" href="turfs.jsp">Book More Turfs</a>
     <a class="button" href="userDashboard.jsp">Go to Dashboard</a>
 </div>

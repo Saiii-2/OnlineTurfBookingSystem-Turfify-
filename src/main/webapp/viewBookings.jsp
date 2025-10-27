@@ -69,7 +69,7 @@
 <body>
 <header>
     <div class="header-container">
-        <h1>Online Turf Booking - Admin</h1>
+        <h1>Turfify - Admin</h1>
         <nav>
             <a href="adminDashboard.jsp">Dashboard</a>
             <a href="logout.jsp">Logout</a>

@@ -103,7 +103,7 @@
 <body>
 <header>
     <div class="header-container">
-        <h1>Online Turf Booking</h1>
+        <h1>Turfify</h1>
         <nav>
             <a href="index.jsp">Home</a>
         </nav>

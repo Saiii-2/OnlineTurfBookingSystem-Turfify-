@@ -12,17 +12,31 @@ import java.sql.*;
 public class TurfServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try (Connection con = DBConnection.getConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM turfs")) {
-
+        String searchQuery = request.getParameter("query");
+        ResultSet rs = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBConnection.getConnection();
+            if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                String sql = "SELECT * FROM turfs WHERE turf_name LIKE ? OR location LIKE ? OR turf_type LIKE ?";
+                ps = con.prepareStatement(sql);
+                String pattern = "%" + searchQuery.trim() + "%";
+                ps.setString(1, pattern);
+                ps.setString(2, pattern);
+                ps.setString(3, pattern);
+            } else {
+                String sql = "SELECT * FROM turfs";
+                ps = con.prepareStatement(sql);
+            }
+            rs = ps.executeQuery();
             request.setAttribute("turfs", rs);
             request.getRequestDispatcher("turfs.jsp").forward(request, response);
-
         } catch (SQLException e) {
             e.printStackTrace();
             response.getWriter().println("Error retrieving turfs");
-        }
+        } 
+        // Do not close rs/ps/con here because JSP may use the ResultSet
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +53,7 @@ public class TurfServlet extends HttpServlet {
                 e.printStackTrace();
                 response.getWriter().println("Error deleting turf");
             }
-            return; // Exit after delete operation
+            return;
         }
 
         // Insert/Add new turf

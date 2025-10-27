@@ -54,15 +54,35 @@
     header nav a:hover {
         background-color: #991f00;
     }
+    .hero-banner {
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+        margin-top: 64px;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        position: relative;
+    }
+    .hero-banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.9;
+    }
     .container {
-        padding: 100px 30px 30px 30px;
+        padding: 30px 30px 30px 30px;
         max-width: 900px;
         margin: 0 auto;
     }
-    form {
-        background: white; padding: 20px;
-        border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    .card {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 3px 20px rgba(0,0,0,0.08);
+        padding: 22px 24px;
         margin-bottom: 30px;
+    }
+    form {
+        margin: 0;
     }
     input[type="text"], input[type="number"] {
         width: 100%; padding: 10px; margin: 10px 0;
@@ -84,6 +104,10 @@
         vertical-align: middle;
     }
     th { background-color: #cc3300; color: white; }
+    table tr:hover {
+        background-color: #ffe6e6;
+        transition: background-color 0.3s;
+    }
     form.inline-form { display: inline; margin: 0; padding: 0; }
     button.action-btn {
         padding: 5px 14px;
@@ -115,66 +139,76 @@
 <body>
 <header>
     <div class="header-container">
-        <h1>Online Turf Booking - Admin</h1>
+        <h1>Turfify - Admin</h1>
         <nav>
             <a href="adminDashboard.jsp">Dashboard</a>
             <a href="logout.jsp">Logout</a>
         </nav>
     </div>
 </header>
+
+<div class="hero-banner">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80" alt="Turf Banner"/>
+</div>
+
 <div class="container">
     <h2>Manage Turfs</h2>
 
-    <!-- Add Turf Form -->
-    <form method="post" action="TurfServlet">
-        <h3>Add New Turf</h3>
-        <label>Turf Name:</label>
-        <input type="text" name="turfName" required/>
-        <label>Location:</label>
-        <input type="text" name="location" required/>
-        <label>Type:</label>
-        <input type="text" name="turfType" required/>
-        <label>Price Per Hour:</label>
-        <input type="number" name="price" step="0.01" required/>
-        <input type="submit" value="Add Turf"/>
-    </form>
+    <div class="card">
+        <!-- Add Turf Form -->
+        <form method="post" action="TurfServlet">
+            <h3>Add New Turf</h3>
+            <label>Turf Name:</label>
+            <input type="text" name="turfName" required/>
+            <label>Location:</label>
+            <input type="text" name="location" required/>
+            <label>Type:</label>
+            <input type="text" name="turfType" required/>
+            <label>Price Per Hour:</label>
+            <input type="number" name="price" step="0.01" required/>
+            <input type="submit" value="Add Turf"/>
+        </form>
+    </div>
 
-    <!-- List Existing Turfs -->
-    <table>
-        <tr>
-            <th>Turf Name</th>
-            <th>Location</th>
-            <th>Type</th>
-            <th>Price Per Hour</th>
-            <th>Actions</th>
-        </tr>
-        <%
-            try (Connection con = DBConnection.getConnection();
-                 Statement stmt = con.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT * FROM turfs")) {
+    <div class="card">
+        <!-- List Existing Turfs -->
+        <table>
+            <tr>
+                <th>Turf Name</th>
+                <th>Location</th>
+                <th>Type</th>
+                <th>Price Per Hour</th>
+                <th>Actions</th>
+            </tr>
+            <%
+                try (Connection con = DBConnection.getConnection();
+                     Statement stmt = con.createStatement();
+                     ResultSet rs = stmt.executeQuery("SELECT * FROM turfs")) {
 
-                while(rs.next()) {
-        %>
-        <tr>
-            <td><%= rs.getString("turf_name") %></td>
-            <td><%= rs.getString("location") %></td>
-            <td><%= rs.getString("turf_type") %></td>
-            <td><%= rs.getDouble("price_per_hour") %></td>
-            <td>
-                <form class="inline-form" method="post" action="TurfServlet">
-                    <input type="hidden" name="action" value="delete"/>
-                    <input type="hidden" name="turfId" value="<%= rs.getInt("turf_id") %>"/>
-                    <button type="submit" class="action-btn" onclick="return confirm('Delete this turf?')">Delete</button>
-                </form>
-            </td>
-        </tr>
-        <%
+                    while(rs.next()) {
+            %>
+            <tr>
+                <td><%= rs.getString("turf_name") %></td>
+                <td><%= rs.getString("location") %></td>
+                <td><%= rs.getString("turf_type") %></td>
+                <td><%= rs.getDouble("price_per_hour") %></td>
+                <td>
+                    <form class="inline-form" method="post" action="TurfServlet">
+                        <input type="hidden" name="action" value="delete"/>
+                        <input type="hidden" name="turfId" value="<%= rs.getInt("turf_id") %>"/>
+                        <button type="submit" class="action-btn" onclick="return confirm('Delete this turf?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <%
+                    }
+                } catch (Exception e) {
+                    out.println("Error loading turfs.");
                 }
-            } catch (Exception e) {
-                out.println("Error loading turfs.");
-            }
-        %>
-    </table>
+            %>
+        </table>
+    </div>
+
 </div>
 </body>
 </html>

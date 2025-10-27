@@ -1,27 +1,39 @@
 <%@ page import="java.sql.*" %>
-<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
 <title>User Login</title>
 <style>
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #e6f2ff;
-        margin: 0;
-        padding: 0;
-        color: #333;
+        margin: 0; padding: 0; color: #333;
+        min-height: 100vh;
+        /* Turf field background image - Unsplash, free for use */
+        background: url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+        background-size: cover;
+        position: relative;
+    }
+    .overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(18,36,56,0.25);
+        z-index: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
     }
     header {
-        background-color: #004080;
+        background: rgba(0, 64, 128, 0.96);
         color: white;
         padding: 0;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         position: fixed;
         width: 100%;
         top: 0;
-        z-index: 1000;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        z-index: 10;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.13);
         height: 64px;
     }
     .header-container {
@@ -39,64 +51,87 @@
         letter-spacing: 1px;
         white-space: nowrap;
     }
-    header nav {
-        display: flex;
-        align-items: center;
-        height: 64px;
-    }
     header nav a {
         color: white;
         text-decoration: none;
         padding: 9px 22px;
         border-radius: 4px;
         background-color: #0066cc;
-        margin-left: 20px;
-        font-size: 17px;
-        font-weight: bold;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        transition: background-color 0.3s ease;
+        font-size: 17px; font-weight: bold;
+        height: 38px; margin-left: 20px;
+        display: flex; align-items: center;
+        transition: background 0.3s;
     }
     header nav a:hover {
         background-color: #0052a3;
     }
-    .container {
-        padding: 100px 30px 30px 30px;
-        max-width: 400px;
-        margin: 0 auto;
+    .center-content {
+        width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+    }
+    .login-card {
+        background: rgba(255,255,255,0.86);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 18px;
+        max-width: 370px;
+        width: 96vw;
+        padding: 38px 32px 30px 32px;
+        margin-top: 92px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        z-index: 2;
+        border: 1.8px solid rgba(0,64,128,0.13);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.55rem;
+        font-weight: 700;
+        color: #00264d;
     }
     form {
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+    }
+    label {
+        margin: 8px 0 4px 0;
+        font-weight: 600;
     }
     input[type="text"], input[type="password"] {
-        width: 100%;
-        padding: 12px;
-        margin: 8px 0 20px 0;
-        border: 1px solid #ccc;
+        padding: 11px;
+        border: 1px solid #bbb;
         border-radius: 6px;
-        box-sizing: border-box;
+        margin-bottom: 17px;
+        font-size: 16px;
+        background: rgba(255,255,255,0.92);
     }
     input[type="submit"] {
         background-color: #007acc;
-        color: white;
+        color: #fff;
+        padding: 14px;
         border: none;
-        padding: 12px;
-        width: 100%;
-        border-radius: 6px;
-        font-size: 16px;
+        border-radius: 7px;
+        font-size: 17px;
+        font-weight: 600;
         cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,110,230,0.09);
+        margin-top: 8px;
+        transition: background 0.3s;
     }
     input[type="submit"]:hover {
         background-color: #005fa3;
     }
     .register-link {
-        margin-top: 20px;
         text-align: center;
-        font-size: 16px;
+        margin-top: 14px; font-size: 16px;
     }
     .register-link a {
         color: #007acc;
@@ -109,31 +144,33 @@
     @media (max-width: 600px) {
         .header-container { padding: 0 8px; }
         header h1 { font-size: 17px; }
-        header nav a { font-size: 14px; padding: 6px 10px; }
-        .container { padding: 90px 8px 24px 8px; }
+        .login-card {padding: 20px 7px 15px 7px;}
     }
 </style>
 </head>
 <body>
+<div class="overlay"></div>
 <header>
     <div class="header-container">
-        <h1>Online Turf Booking</h1>
+        <h1>Turfify</h1>
         <nav>
             <a href="loginSelection.jsp">Login</a>
         </nav>
     </div>
 </header>
-<div class="container">
-    <h2>User Login</h2>
-    <form action="UserServlet" method="post">
-        <label for="username">Username:</label><br/>
-        <input type="text" id="username" name="username" required/><br/>
-        <label for="password">Password:</label><br/>
-        <input type="password" id="password" name="password" required/><br/>
-        <input type="submit" value="Login"/>
-    </form>
-    <div class="register-link">
-        New user? <a href="register.jsp">Register Here</a>
+<div class="center-content">
+    <div class="login-card">
+        <h2>User Login</h2>
+        <form action="UserServlet" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+            <input type="submit" value="Login" />
+        </form>
+        <div class="register-link">
+            New user? <a href="register.jsp">Register Here</a>
+        </div>
     </div>
 </div>
 </body>

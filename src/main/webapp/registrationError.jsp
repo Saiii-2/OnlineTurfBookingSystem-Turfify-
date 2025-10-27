@@ -35,7 +35,7 @@
 <body>
 <header>
     <div class="header-container">
-        <h1>Online Turf Booking</h1>
+        <h1>Turfify</h1>
         <nav>
             <a href="register.jsp" class="button">Try Another Username</a>
             <a href="index.jsp" class="button" style="background:#0066cc;">Home</a>
