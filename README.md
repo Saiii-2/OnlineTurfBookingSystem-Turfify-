@@ -1,89 +1,165 @@
-Turfify – Online Turf Booking System
-Turfify is a web-based platform for booking sports turfs online. It allows users to browse available turfs, check time slots, make bookings, and receive confirmations. Admins can manage turf listings, booking records, user accounts, and monitor transactions. The project uses Java, JSP, HTML, CSS, MySQL, and runs on Apache Tomcat.
+🏟️ Online Turf Booking System – Turfify
+📘 Project Overview
 
-Features
-User registration/login
+The Online Turf Booking System (Turfify) is a dynamic web application built using Java (Servlets & JSP) and MySQL, designed to simplify the process of booking sports turfs online.
+It allows users to register, log in, book available turfs, view their bookings, and manage their profiles.
+Admins can manage turfs, view bookings, and monitor overall activity.
 
-Browse all available turfs (cricket, football, volleyball, badminton, basketball)
+🛠️ Tech Stack
+Layer	Technology Used
+Frontend	HTML, CSS, JSP
+Backend	Java Servlets, JDBC
+Database	MySQL
+Server	Apache Tomcat
+IDE	Eclipse IDE (Enterprise Edition)
+Version Control	Git & GitHub
+📂 Project Structure
+OnlineTurfBooking/
+│
+├── src/main/java/com/booking/
+│   ├── servlet/
+│   │   ├── AdminServlet.java
+│   │   ├── BookingServlet.java
+│   │   ├── BookingCancelServlet.java
+│   │   ├── RegisterServlet.java
+│   │   ├── TurfServlet.java
+│   │   ├── UserServlet.java
+│   │   └── DeleteUserServlet.java
+│   │
+│   └── util/
+│       ├── DBConnection.java
+│       └── DBConnectionTest.java
+│
+├── src/main/webapp/
+│   ├── WEB-INF/
+│   │   └── web.xml
+│   ├── adminDashboard.jsp
+│   ├── adminLogin.jsp
+│   ├── bookingConfirmation.jsp
+│   ├── bookTurf.jsp
+│   ├── loginSelection.jsp
+│   ├── logout.jsp
+│   ├── manageTurfs.jsp
+│   ├── processBooking.jsp
+│   ├── register.jsp
+│   ├── registrationError.jsp
+│   ├── registrationSuccess.jsp
+│   ├── turfs.jsp
+│   ├── userDashboard.jsp
+│   ├── userLogin.jsp
+│   └── viewBookings.jsp
+│
+└── DatabaseCodes.sql
 
-Turf image gallery and descriptions
+⚙️ Database Configuration
 
-Book turf for specific date and time slots
+Create a MySQL database named OnlineTurfBookingDB.
 
-Online payment tracking
+SQL Schema Example
+CREATE DATABASE OnlineTurfBookingDB;
+USE OnlineTurfBookingDB;
 
-View booking history
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(100),
+    phone VARCHAR(15)
+);
 
-Admin login for turf management and booking reports
+CREATE TABLE turfs (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    turf_name VARCHAR(100),
+    location VARCHAR(100),
+    price_per_hour DECIMAL(10,2),
+    availability BOOLEAN
+);
 
-Sports-ground themed landing page
+CREATE TABLE bookings (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
+    turf_id INT,
+    booking_date DATE,
+    time_slot VARCHAR(50),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (turf_id) REFERENCES turfs(id)
+);
 
-Technology Stack
-Java (Backend/Business Logic)
+⚙️ Configuration Steps
+1️⃣ Setup in Eclipse
 
-JSP & Servlets (Frontend/Controllers)
+Open Eclipse IDE for Enterprise Java Developers.
 
-HTML, CSS (Frontend/UI)
+Create a new Dynamic Web Project → Name it OnlineTurfBooking.
 
-MySQL (Database)
+Add Tomcat Server (v9 or above).
 
-Apache Tomcat (Web Server)
+Connect MySQL JDBC Driver (add mysql-connector-j.jar to lib folder or classpath).
 
-Maven (Build Tool)
+2️⃣ Configure Database
 
-Prerequisites;-
-JDK 17 or newer
-Apache Tomcat 9+
-MySQL Server 8+
-Maven
-Git
+Update DBConnection.java:
 
-How to Set Up
-Clone the Repository
+private static final String URL = "jdbc:mysql://localhost:3306/OnlineTurfBookingDB";
+private static final String USER = "root";
+private static final String PASSWORD = "your_password";
 
-git clone https://github.com/Saiii-2/OnlineTurfBookingSystem-Turfify-.git
-Database Setup
+3️⃣ Run the Project
 
-Create a MySQL database named onlineturfbookingdb(DatabaseCodes.sql).
+Right-click the project → Run As → Run on Server
 
-Import the provided SQL schema and data (if available) from DatabaseCodes.sql and DatabaseCodes.sql.
+Default URL: http://localhost:8080/OnlineTurfBooking/
 
-Update database credentials in src/main/resources/db.properties or in your Java config files.
+🧑‍💻 Features
+🔹 User Module
 
-Build the Project
+User Registration & Login
 
-text
-mvn clean install
-Deploy to Tomcat
+Browse available turfs
 
-Copy the generated .war file from /target to Tomcat's /webapps directory.
+Book turfs with date/time slots
 
-Start the Tomcat server.
+View and cancel bookings
 
-Access the app at http://localhost:8080/Turfify
+Logout functionality
 
-Running Locally
-Start MySQL, ensure the turfify database and tables are present.
+🔹 Admin Module
 
-Run Tomcat server and deploy the .war file.
+Admin login dashboard
 
-Open the application in your browser.
+Add / Edit / Delete turfs
 
-Default Demo Credentials
-User: demo_user / password
+View all user bookings
 
-Admin: admin_user / adminpassword
+Manage users
 
-Usage
-Browse turfs via homepage image banner.
+📸 Screens (Example)
 
-Click on turf cards for details and available slots.
+index.jsp – Landing Page
 
-Select date/time, enter booking info, proceed to payment (simulated/track reference).
+register.jsp – Registration Page
 
-Registered users can view and manage their bookings.
+loginSelection.jsp – Login type selection (User/Admin)
 
-Admins can view all turfs, bookings, users, and generate management reports.
+adminDashboard.jsp – Admin panel
 
-Contributing
-Feel free to open issues or submit pull requests for enhancing UI/UX, adding features, fixing bugs, or updating documentation.
+userDashboard.jsp – User panel
+
+bookingConfirmation.jsp – Confirmation message
+
+🚀 Future Enhancements
+
+Payment Gateway Integration
+
+Turf Availability Calendar
+
+Email Notifications for Booking
+
+User Reviews & Ratings
+
+👨‍💻 Author
+
+Merla Purna Saiteja
+📧 saiteja.merla789@gmail.com
+
+💻 Sathyabama University – B.E. CSE (2023–2027)
